@@ -1,6 +1,83 @@
 # Hart
 Haml Dart implementation
 
+## Usage
+Dart doesn't allow any code evaluation so you have to precompile all your templates
+```dart
+#import('lib/hart.dart');
+
+main() {
+    String template = '''
+!!! 5
+%html
+  %head
+    %title= title
+    %script
+      :cdata
+        foo
+    %script{ src: 'jquery.js' }
+  %body.one.two.three
+    %h1 Welcome
+    %ul#menu{ class: newClass}
+      %li.first#list one
+      %li two
+      %li.last three
+      %li
+        %ul
+          %li nested
+    - if (items !== null)
+    %ul
+      - each item in items
+        %li= item
+    %div.article.first
+      article text here
+      and here
+''';
+    Hart.compile(template, 'template.dart');
+}
+```
+
+then use them in your code.
+```dart
+#import('template.dart'); // import generated template
+
+main() {
+    print(
+        new Template({ // initialize template with local variables
+            'title': 'TITLETITLETITLE',
+            'newClass': 'newClass',
+            'items': [1,2,3]
+        }).render()
+    );
+}
+```
+
+This will generate
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>TITLETITLETITLE</title>
+<script><![CDATA[
+foo
+]]></script>
+<script src="jquery.js"></script></head>
+<body class="one two three">
+<h1>Welcome</h1>
+<ul id="menu" class="newClass">
+<li id="list" class="first">one</li>
+<li>two</li>
+<li class="last">three</li>
+<li>
+<ul>
+<li>nested</li></ul></li></ul>
+<ul>
+<li>1</li>
+<li>2</li>
+<li>3</li></ul>
+<div class="article first">article text hereand here</div></body></html>
+```
+
 ## License
 
 (The MIT License)
