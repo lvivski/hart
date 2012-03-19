@@ -43,26 +43,6 @@ class Lexer {
         'text'              : const RegExp(@'^([^\n]+)')
     };
 
-    static List<String> rulesTypes = const [
-        'indent',
-        'conditionalComment',
-        'comment',
-        'silentComment',
-        'doctype',
-        'escape',
-        'filter',
-        'each',
-        'code',
-        'outputCode',
-        'escapeCode',
-        'attrs',
-        'tag',
-        'class',
-        'id',
-        'text'
-    ];
-
-
     static List tokenize(String str) {
         str = str.trim().replaceAll(const RegExp(@'\r\n|\r'), '\n');
         Match matches;
@@ -71,7 +51,7 @@ class Lexer {
         num lastIndents = 0;
         List tokens = [];
         while (str.length > 0) {
-            for (var type in rulesTypes) {
+            for (var type in rules.getKeys()) {
                 matches = rules[type].firstMatch(str);
                 if (matches !== null) {
                     List matchesList = [];
@@ -87,14 +67,14 @@ class Lexer {
                                     : matchesList[0]
                     };
                     str = str.substring(matches[0].length);
-                    if (type == 'indent') {
-                        line += 1;
+                    if (type === 'indent') {
+                        ++line;
                     } else {
                         break;
                     }
                     var indents = token['val'].length / 2;
                     if (indents % 1 > 0) {
-                        throw new Exception('invalid indentation; got ${token['val'].length} spaces, should be multiple of 2');
+                        throw new Exception("invalid indentation; got ${token['val'].length} spaces, should be multiple of 2");
                     } else if (indents - 1 > lastIndents) {
                         throw new Exception('invalid indentation; got $indents, when previous was $lastIndents');
                     } else if (lastIndents > indents) {

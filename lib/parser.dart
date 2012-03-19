@@ -46,7 +46,7 @@ class Parser {
         num indents = 1;
         StringBuffer buf = new StringBuffer();
         next;
-        while (peek['type'] !== 'eof' && indents) {
+        while (peek['type'] !== 'eof' && indents > 0) {
             switch((token = next)['type']) {
                 case 'newline':
                     buf.add(@'\n');
@@ -64,7 +64,7 @@ class Parser {
                     }
                     break;
                 default:
-                    buf.add(token.match.replaceAll(const RegExp(@'"'), '\"'));
+                    buf.add(token['match'].replaceAll(const RegExp(@'"'), @'\"'));
             }
         }
         return buf;
@@ -92,7 +92,7 @@ class Parser {
             buf.add(" 'class': '${Strings.join(classes, ' ')}' ");
         }
         return buf.length > 0
-                ? '\${attrs({${Strings.join(buf, ',')})}'
+                ? "\${attrs({${Strings.join(buf, ',')}})}"
                 : '';
     }
 
@@ -153,6 +153,29 @@ class Parser {
                     ? block
                     : expr;
         return '<!-- ${buf.toString()} -->';
+    }
+
+    get code() {
+        var code = next['val'];
+        if (peek['type'] === 'indent') {
+            return '\${(){\nvar buf=new StringBuffer();\n${code}\nbuf.add("${block}");\nreturn buf.toString();\n}()}';
+        }
+        return '\${(){\n${code};return'';\n}()}';
+    }
+
+    get filter() {
+        var filter = next['val'];
+        if (peek['type'] !== 'indent') {
+            throw new Exception("filter '${filter}' expects a text block");
+        }
+        return "\${Filters.${filter}('${textBlock}')}";
+    }
+
+    get iterate() {
+        var each = next;
+        if (peek['type'] !== 'indent')
+            throw new Exception("'- each' expects a block, but got ${peek['type']}");
+        return "\${(){\nvar buf=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuf.add(\"${block}\");\n});return buf.toString();\n}()}";
     }
 
     get expr() {

@@ -5,28 +5,38 @@
 #import('parser.dart');
 
 class Hart {
-    static compile(data) {
-        return new Parser(data).parsed;
-    }
-}
+    static compile(data, filename) {
+        new File(filename).open(FileMode.WRITE, (file){
+            file.writeStringSync("""
+#library('template');
 
-main() {
-    String template = '''
-!!! 5
-%html
-  %head
-    %title= title
-    %script{ src: 'jquery.js' }
-    %script{ src: 'jquery.ui.js' }
-  %body.one.two.three
-    %h1 Welcome
-    %ul#menu.class
-      %li.first#list one
-      %li two
-      %li.last three
-      %li
-        %ul
-          %li nested
-''';
-    print(Hart.compile(template));
+#source('lib/utils.dart');
+
+class Template {
+    Map locals;
+
+    noSuchMethod(String name, List args) {
+        if (locals === null) {
+            locals = [];
+        }
+        if (name.length > 4) {
+            String prefix  = name.substring(0, 4);
+            String key     = name.substring(4);
+            if (prefix == "get:") {
+                return locals[key];
+            } else if (prefix == "set:") {
+                locals[key] = args[0];
+            }
+        }
+    }
+
+    Template(this.locals);
+
+    render () {
+        return '''
+""");
+            file.writeStringSync(new Parser(data).parsed);
+            file.writeStringSync("''';}}");
+        });
+    }
 }
