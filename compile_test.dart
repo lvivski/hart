@@ -1,7 +1,7 @@
 #import('lib/hart.dart');
 
 main() {
-    String template = '''
+  String template = '''
 !!! 5
 %html
   %head
@@ -27,5 +27,5 @@ main() {
       article text here
       and here
 ''';
-    Hart.compile(template, 'template.dart');
+  Hart.compile(template, 'template.dart');
 }
