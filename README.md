@@ -34,7 +34,7 @@ main() {
       article text here
       and here
 ''';
-    Hart.compile(template, 'template.dart');
+  Hart.compile(template, 'template.dart');
 }
 ```
 
@@ -44,13 +44,13 @@ then use them in your code.
 #import('template.dart'); // import generated template
 
 main() {
-    print(
-        new Template({ // initialize template with local variables
-            'title': 'TITLETITLETITLE',
-            'newClass': 'newClass',
-            'items': [1,2,3]
-        }).render()
-    );
+  print(
+    new Template({ // initialize template with local variables
+      'title': 'TITLETITLETITLE',
+      'newClass': 'newClass',
+      'items': [1,2,3]
+    }).render()
+  );
 }
 ```
 
