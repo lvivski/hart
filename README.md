@@ -1,5 +1,5 @@
 # Hart
-Haml Dart implementation
+Haml implementation in Dart
 
 ## Usage
 Dart doesn't allow any code evaluation so you have to precompile all your templates
