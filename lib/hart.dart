@@ -17,7 +17,7 @@ class Template {
 
     noSuchMethod(String name, List args) {
         if (locals === null) {
-            locals = [];
+            locals = {};
         }
         if (name.length > 4) {
             String prefix  = name.substring(0, 4);

@@ -5,15 +5,15 @@ class Filters {
     static javascript (str) => '<script type="text/javascript">\n//<![CDATA[\n${str}\n//]]></script>';
 }
 
-attrs (attrs) {
+attrs (attrMap) {
     StringBuffer buf = new StringBuffer();
-    for (var key in attrs.getKeys()) {
-        if (attrs[key] is bool) {
-            if (attrs[key] === true) {
+    for (var key in attrMap.getKeys()) {
+        if (attrMap[key] is bool) {
+            if (attrMap[key] === true) {
                 buf.add(' ${key}="${key}"');
             }
-        } else if (attrs[key] !== null) {
-            buf.add(' ${key}="${escape(attrs[key])}"');
+        } else if (attrMap[key] !== null) {
+            buf.add(' ${key}="${escape(attrMap[key])}"');
         }
     }
     return buf.toString();
