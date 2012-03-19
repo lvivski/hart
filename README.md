@@ -3,7 +3,8 @@ Haml Dart implementation
 
 ## Usage
 Dart doesn't allow any code evaluation so you have to precompile all your templates
-```dart
+
+``` dart
 #import('lib/hart.dart');
 
 main() {
@@ -38,7 +39,8 @@ main() {
 ```
 
 then use them in your code.
-```dart
+
+``` dart
 #import('template.dart'); // import generated template
 
 main() {
@@ -53,7 +55,8 @@ main() {
 ```
 
 This will generate
-```html
+
+``` html
 <!DOCTYPE html>
 <html>
 <head>
