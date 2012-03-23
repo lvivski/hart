@@ -4,17 +4,18 @@
 #import('parser.dart');
 
 class Hart {
-  static compile(data, filename) {
-    new File(filename).open(FileMode.WRITE, (file){
+  static compile(data, filepath) {
+    new File(filepath).open(FileMode.WRITE, (file){
+      String className = camelize(file.name.split('/').last().split('.')[0]);
       file.writeStringSync("""
 #library('template');
 
-#source('lib/utils.dart');
+#source('../lib/utils.dart');
 
-class Template {
+class ${className} {
   Map locals;
 
-  Template(this.locals);
+  ${className}(this.locals);
 
   noSuchMethod(String name, List args) {
     if (locals === null) {
@@ -39,5 +40,9 @@ ${new Parser(data).parsed}
 }
 """);
     });
+  }
+  
+  static String camelize(String name) {
+    return Strings.join(name.split(const RegExp(@'-|_')).map((part) => part[0].toUpperCase() + part.substring(1)), '');
   }
 }

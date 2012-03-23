@@ -1,7 +1,3 @@
-#import('lib/hart.dart');
-
-main() {
-  String template = '''
 !!! 5
 %html
   %head
@@ -26,6 +22,3 @@ main() {
     %div.article.first
       article text here
       and here
-''';
-  Hart.compile(template, 'template.dart');
-}
