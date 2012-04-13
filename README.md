@@ -4,44 +4,14 @@ Haml implementation in Dart
 ## Usage
 Dart doesn't allow any code evaluation so you have to precompile all your templates
 
-``` dart
-#import('lib/hart.dart');
-
-main() {
-    String template = '''
-!!! 5
-%html
-  %head
-    %title= title
-    %script
-      :cdata
-        foo
-    %script{ src: 'jquery.js' }
-  %body.one.two.three
-    %h1 Welcome
-    %ul#menu{ class: newClass}
-      %li.first#list one
-      %li two
-      %li.last three
-      %li
-        %ul
-          %li nested
-    - if (items !== null)
-    %ul
-      - each item in items
-        %li= item
-    %div.article.first
-      article text here
-      and here
-''';
-  Hart.compile(template, 'template.dart');
-}
+```
+$PATH_TO_DART_SDK/bin/dart bin/hart compile template.haml
 ```
 
 then use them in your code.
 
 ``` dart
-#import('template.dart'); // import generated template
+#import('gen/template.dart'); // import generated template
 
 main() {
   print(
