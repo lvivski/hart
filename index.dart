@@ -1,4 +1,3 @@
-#import('dart:io');
 #import('lib/hart.dart');
 
 main(){
