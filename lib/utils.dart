@@ -1,3 +1,5 @@
+#library('utils');
+
 class Filters {
   static plain (str)   => str;
   static cdata (str)   => '<![CDATA[\n${str}\n]]>';

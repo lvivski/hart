@@ -1,3 +1,8 @@
+#import('dart:io');
+#import('lib/hart.dart');
+
+main(){
+  print(Hart.parse('''
 !!! 5
 %html
   %head
@@ -22,3 +27,5 @@
     %div.article.first
       article text here
       and here
+'''));
+}

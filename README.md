@@ -34,51 +34,8 @@ main() {
       article text here
       and here
 ''';
-  Hart.compile(template, 'template.dart');
+  print(Hart.parse(template));
 }
-```
-
-then use them in your code.
-
-``` dart
-#import('template.dart'); // import generated template
-
-main() {
-  print(
-    new Template({ // initialize template with local variables
-      'title': 'TITLETITLETITLE',
-      'newClass': 'newClass',
-      'items': [1,2,3]
-    }).render()
-  );
-}
-```
-
-This will generate
-
-``` html
-<!DOCTYPE html>
-<html>
-<head>
-<title>TITLETITLETITLE</title>
-<script><![CDATA[
-foo
-]]></script>
-<script src="jquery.js"></script></head>
-<body class="one two three">
-<h1>Welcome</h1>
-<ul id="menu" class="newClass">
-<li id="list" class="first">one</li>
-<li>two</li>
-<li class="last">three</li>
-<li>
-<ul>
-<li>nested</li></ul></li></ul>
-<ul>
-<li>1</li>
-<li>2</li>
-<li>3</li></ul>
-<div class="article first">article text hereand here</div></body></html>
 ```
 
 ## License
