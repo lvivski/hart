@@ -6,6 +6,7 @@ main(){
 %html
   %head
     %title= title
+    %link{ rel: "stylesheet", href: "/stylesheets/main.css", type: "text/css"}
     %script
       :cdata
         foo

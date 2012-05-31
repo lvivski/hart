@@ -85,8 +85,9 @@ class Parser {
         case 'attrs':
           Iterable<Match> matches = const RegExp(@'(\w+) *:', ignoreCase:true).allMatches(next['val']);
           for (Match match in matches) {
-            buff.add(current['val'].replaceAll(match[1], "'${match[1]}'"));
+            current['val'] = current['val'].replaceAll(match[1], "'${match[1]}'");
           }
+          buff.add(current['val']);
       }
     }
     if (classes.length > 0) {
