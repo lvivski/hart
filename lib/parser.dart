@@ -100,7 +100,7 @@ class Parser {
   get tag() {
     String tagName = next['val'];
     bool selfClosing = Lexer.selfClosingTags.indexOf(tagName) !== -1;
-    StringBuffer buff = new StringBuffer('\\n<${tagName}${attrs}' + (selfClosing ? '/>' : '>'));
+    StringBuffer buff = new StringBuffer('\\n<${tagName}${attrs}${selfClosing ? '/' : ''}>');
     switch (peek['type']) {
       case 'text':
         buff.add(text);
@@ -217,7 +217,7 @@ class Parser {
         next;
         return expr;
       default:
-        throw new Exception('unexpected ' + peek['type']);
+        throw new Exception('unexpected ${peek['type']}');
     }
   }
 
