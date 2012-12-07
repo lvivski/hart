@@ -1,7 +1,7 @@
 library hart;
 
-import 'parser.dart';
-import 'compiler.dart';
+import 'src/parser.dart';
+import 'src/compiler.dart';
 
 class Hart {
   static parse(String data) {
