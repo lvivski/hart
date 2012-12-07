@@ -14,14 +14,13 @@ class ${className}View extends View {
       locals = {};
     }
     if (mirror.isGetter) {
-        return locals[mirror.memberName];
-      } else if (mirror.isSetter) {
-        locals[mirror.memberName] = mirror.positionalArguments[0];
-      }
+      return locals[mirror.memberName];
+    } else if (mirror.isSetter) {
+      locals[mirror.memberName] = mirror.positionalArguments[0];
     }
   }
 
-  get () {
+  get() {
     return '''
 $data
     ''';
