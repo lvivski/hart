@@ -1,4 +1,4 @@
-import 'lib/hart.dart';
+import '../lib/hart.dart';
 
 main(){
   var templates = {

@@ -5,7 +5,7 @@ Haml implementation in Dart
 Dart doesn't allow any code evaluation so you have to precompile all your templates
 
 ``` dart
-#import('lib/hart.dart');
+import 'package:hart/hart.dart';
 
 main() {
     String template = '''
