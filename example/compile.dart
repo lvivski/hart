@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../lib/hart.dart';
 
 main(){
@@ -10,7 +12,7 @@ main(){
     %link{ rel: "stylesheet", href: "/stylesheets/main.css", type: "text/css"}
     %script
       :cdata
-        foo
+        console.log(true)
     %script{ src: 'jquery.js' }
   %body.one.two.three
     %h1 Welcome
@@ -29,6 +31,8 @@ main(){
       article text here
       and here
 '''};
-
-print(Hart.compile(templates));
+  
+  new File('example/views.dart').open(FileMode.WRITE).then((file) {
+    file.writeString(Hart.compile(templates));
+  });
 }
