@@ -1,4 +1,4 @@
-#library('utils');
+library utils;
 
 class Filters {
   static plain (str)   => str;

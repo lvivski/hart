@@ -1,6 +1,6 @@
-#library('parser');
+library parser;
 
-#import('lexer.dart');
+import 'lexer.dart';
 
 class Parser {
   List tokens;
@@ -10,15 +10,15 @@ class Parser {
     this.tokens = Lexer.tokenize(string);
   }
 
-  get peek() => tokens[0];
+  get peek => tokens[0];
 
-  get next() {
+  get next {
     current = tokens[0];
     tokens.removeRange(0,1);
     return current;
   }
 
-  get outdent() {
+  get outdent {
     switch(peek['type']) {
       case 'eof':
         return;
@@ -29,9 +29,9 @@ class Parser {
     }
   }
 
-  get text() => next['val'].trim();
+  get text => next['val'].trim();
 
-  get block() {
+  get block {
     StringBuffer buff = new StringBuffer();
     next;
     while (peek['type'] !== 'outdent' && peek['type'] !== 'eof') {
@@ -41,7 +41,7 @@ class Parser {
     return buff;
   }
 
-  get textBlock() {
+  get textBlock {
     var token;
     num indents = 1;
     StringBuffer buff = new StringBuffer();
@@ -49,28 +49,28 @@ class Parser {
     while (peek['type'] !== 'eof' && indents > 0) {
       switch((token = next)['type']) {
         case 'newline':
-          buff.add(@'\n');
+          buff.add(r'\n');
           buff.add(Strings.join(new List(indents), ' '));
           break;
         case 'indent':
           ++indents;
-          buff.add(@'\n');
+          buff.add(r'\n');
           buff.add(Strings.join(new List(indents), ' '));
           break;
         case 'outdent':
           --indents;
           if (indents === 1) {
-            buff.add(@'\n');
+            buff.add(r'\n');
           }
           break;
         default:
-          buff.add(token['match'].replaceAll(const RegExp(@'"'), @'\"'));
+          buff.add(token['match'].replaceAll(new RegExp(r'"'), r'\"'));
       }
     }
     return buff;
   }
 
-  get attrs() {
+  get attrs {
     List attributes = ['attrs', 'class', 'id'];
     List classes = [];
     List buff = [];
@@ -83,11 +83,12 @@ class Parser {
           classes.add(next['val']);
           break;
         case 'attrs':
-          Iterable<Match> matches = const RegExp(@'(\w+) *:', ignoreCase:true).allMatches(next['val']);
+          Iterable<Match> matches = new RegExp(r'(\w+) *:', ignoreCase:true).allMatches(next['val']);
           for (Match match in matches) {
             current['val'] = current['val'].replaceAll(match[1], "'${match[1]}'");
           }
           buff.add(current['val']);
+          break;
       }
     }
     if (classes.length > 0) {
@@ -97,7 +98,7 @@ class Parser {
         "\${attrs({${Strings.join(buff, ',')}})}" : '';
   }
 
-  get tag() {
+  get tag {
     String tagName = next['val'];
     bool selfClosing = Lexer.selfClosingTags.indexOf(tagName) !== -1;
     StringBuffer buff = new StringBuffer('\\n<${tagName}${attrs}${selfClosing ? '/' : ''}>');
@@ -119,6 +120,7 @@ class Parser {
         break;
       case 'indent':
         buff.add(block);
+        break;
     }
     if (!selfClosing) {
       buff.add('</${tagName}>');
@@ -126,33 +128,33 @@ class Parser {
     return buff;
   }
 
-  get outputCode() => next['val'];
+  get outputCode => next['val'];
 
-  get escapeCode() => '\${escape(${next['val'].trim()})}';
+  get escapeCode => '\${escape(${next['val'].trim()})}';
 
-  get doctype() {
+  get doctype {
     String type = next['val'].trim().toLowerCase();
     type = type.length > 0 ? type : 'default';
     if (Lexer.doctypes.containsKey(type)) {
-      return Lexer.doctypes[type].replaceAll(const RegExp(@'"'), '\\"');
+      return Lexer.doctypes[type].replaceAll(new RegExp(r'"'), '\\"');
     } else {
       throw new Exception("doctype '${type}' does not exist");
     }
   }
 
-  get conditionalComment() {
+  get conditionalComment {
     var condition= next['val'];
     var buff = peek['type'] === 'indent' ? block : expr;
     return '<!--${condition}>${buff.toString()}<![endif]-->';
   }
 
-  get comment() {
+  get comment {
     next;
     var buff = peek['type'] === 'indent' ? block : expr;
     return '<!-- ${buff.toString()} -->';
   }
 
-  get code() {
+  get code {
     var code = next['val'];
     if (peek['type'] === 'indent') {
       return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${block}");\nreturn buff.toString();\n}()}';
@@ -160,7 +162,7 @@ class Parser {
     return '\${(){\n${code};return'';\n}()}';
   }
 
-  get filter() {
+  get filter {
     var filter = next['val'];
     if (peek['type'] !== 'indent') {
       throw new Exception("filter '${filter}' expects a text block");
@@ -168,7 +170,7 @@ class Parser {
     return "\${Filters.${filter}('${textBlock}')}";
   }
 
-  get iterate() {
+  get iterate {
     var each = next;
     if (peek['type'] !== 'indent') {
       throw new Exception("'- each' expects a block, but got ${peek['type']}");
@@ -176,7 +178,7 @@ class Parser {
     return "\${(){\nStringBuffer buff=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuff.add(\"${block}\");\n});return buff.toString();\n}()}";
   }
 
-  get expr() {
+  get expr {
     switch (peek['type']) {
       case 'id':
       case 'class':
@@ -221,7 +223,7 @@ class Parser {
     }
   }
 
-  get parsed() {
+  get parsed {
     StringBuffer buff = new StringBuffer();
     while (peek['type'] !== 'eof') {
       buff.add(this.expr);

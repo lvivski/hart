@@ -1,2 +1,4 @@
 .children
-/gen
+.project
+/pubspec.lock
+/packages

@@ -1,7 +1,8 @@
-#import('lib/hart.dart');
+import 'lib/hart.dart';
 
 main(){
-  print(Hart.parse('''
+  var templates = {
+    'index': '''
 !!! 5
 %html
   %head
@@ -27,5 +28,7 @@ main(){
     %div.article.first
       article text here
       and here
-'''));
+'''};
+
+print(Hart.compile(templates));
 }

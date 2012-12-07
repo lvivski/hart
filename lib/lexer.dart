@@ -1,4 +1,4 @@
-#library('lexer');
+library lexer;
 
 class Lexer {
   static Map<String,String> doctypes = const {
@@ -24,38 +24,38 @@ class Lexer {
   ];
 
 
-  static Map<String,RegExp> rules = const {
-    'indent'            : const RegExp(@'^\n( *)(?! *-#)'),
-    'conditionalComment': const RegExp(@'^\/(\[[^\n]+\])'),
-    'comment'           : const RegExp(@'^\n? *\/ *'),
-    'silentComment'     : const RegExp(@'^\n? *-#([^\n]*)'),
-    'doctype'           : const RegExp(@'^!!! *([^\n]*)'),
-    'escape'            : const RegExp(@'^\\(.)'),
-    'filter'            : const RegExp(@'^:(\w+) *'),
-    'each'              : const RegExp(@'^\- *each *(\w+)(?: *, *(\w+))? * in ([^\n]+)'),
-    'code'              : const RegExp(@'^\-([^\n]+)'),
-    'outputCode'        : const RegExp(@'^!=([^\n]+)'),
-    'escapeCode'        : const RegExp(@'^=([^\n]+)'),
-    'attrs'             : const RegExp(@'^\{(.*?)\}'),
-    'tag'               : const RegExp(@'^%([-a-zA-Z][-a-zA-Z0-9:]*)'),
-    'class'             : const RegExp(@'^\.([\w\-]+)'),
-    'id'                : const RegExp(@'^\#([\w\-]+)'),
-    'text'              : const RegExp(@'^([^\n]+)')
+  static final Map<String,RegExp> rules = {
+    'indent'            : new RegExp(r'^\n( *)(?! *-#)'),
+    'conditionalComment': new RegExp(r'^\/(\[[^\n]+\])'),
+    'comment'           : new RegExp(r'^\n? *\/ *'),
+    'silentComment'     : new RegExp(r'^\n? *-#([^\n]*)'),
+    'doctype'           : new RegExp(r'^!!! *([^\n]*)'),
+    'escape'            : new RegExp(r'^\\(.)'),
+    'filter'            : new RegExp(r'^:(\w+) *'),
+    'each'              : new RegExp(r'^\- *each *(\w+)(?: *, *(\w+))? * in ([^\n]+)'),
+    'code'              : new RegExp(r'^\-([^\n]+)'),
+    'outputCode'        : new RegExp(r'^!=([^\n]+)'),
+    'escapeCode'        : new RegExp(r'^=([^\n]+)'),
+    'attrs'             : new RegExp(r'^\{(.*?)\}'),
+    'tag'               : new RegExp(r'^%([-a-zA-Z][-a-zA-Z0-9:]*)'),
+    'class'             : new RegExp(r'^\.([\w\-]+)'),
+    'id'                : new RegExp(r'^\#([\w\-]+)'),
+    'text'              : new RegExp(r'^([^\n]+)')
   };
 
   static List tokenize(String str) {
-    str = str.trim().replaceAll(const RegExp(@'\r\n|\r'), '\n');
+    str = str.trim().replaceAll(new RegExp(r'\r\n|\r'), '\n');
     Match matches;
     var token;
     int line = 1;
     num lastIndents = 0;
     List tokens = [];
     while (str.length > 0) {
-      for (var type in rules.getKeys()) {
+      for (var type in rules.keys) {
         matches = rules[type].firstMatch(str);
         if (matches !== null) {
           List matchesList = [];
-          for (var i = 1, len = matches.groupCount(); i <= len; i++) {
+          for (var i = 1, len = matches.groupCount; i <= len; i++) {
             matchesList.add(matches.group(i));
           }
           token = {
