@@ -7,9 +7,9 @@ class Filters {
   static javascript (str) => '<script type="text/javascript">\n//<![CDATA[\n${str}\n//]]></script>';
 }
 
-attrs (attrMap) {
+attrs (Map attrMap) {
   StringBuffer buf = new StringBuffer();
-  for (var key in attrMap.getKeys()) {
+  for (var key in attrMap.keys) {
     if (attrMap[key] is bool) {
       if (attrMap[key] === true) {
         buf.add(' ${key}="${key}"');
