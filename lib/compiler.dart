@@ -9,17 +9,14 @@ class ${className}View extends View {
 
   ${className}View(this.locals);
 
-  noSuchMethod(String name, List args) {
+  noSuchMethod(mirror) {
     if (locals === null) {
       locals = {};
     }
-    if (name.length > 4) {
-      String prefix = name.substring(0, 4);
-      String key   = name.substring(4);
-      if (prefix == "get:") {
-        return locals[key];
-      } else if (prefix == "set:") {
-        locals[key] = args[0];
+    if (mirror.isGetter) {
+        return locals[mirror.memberName];
+      } else if (mirror.isSetter) {
+        locals[mirror.memberName] = mirror.positionalArguments[0];
       }
     }
   }
@@ -65,7 +62,7 @@ class View {
   static compile(Map templates) {
     StringBuffer buff = new StringBuffer('''
 library view;
-import 'package:hart/lib/utils.dart';
+import 'package:hart/utils.dart';
 ''');
     templates.keys.forEach((key) {
       buff.add(_getClass(camelize(key), templates[key]));  
