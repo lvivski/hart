@@ -53,7 +53,7 @@ class Lexer {
     while (str.length > 0) {
       for (var type in rules.keys) {
         matches = rules[type].firstMatch(str);
-        if (matches !== null) {
+        if (matches != null) {
           List matchesList = [];
           for (var i = 1, len = matches.groupCount; i <= len; i++) {
             matchesList.add(matches.group(i));
@@ -65,7 +65,7 @@ class Lexer {
             'val' : matchesList.length > 1 ? matchesList : matchesList[0]
           };
           str = str.substring(matches[0].length);
-          if (type === 'indent') {
+          if (type == 'indent') {
             ++line;
           } else {
             break;
@@ -82,7 +82,7 @@ class Lexer {
                 'line': line
               });
             }
-          } else if (lastIndents !== indents) {
+          } else if (lastIndents != indents) {
             tokens.add({
               'type': 'indent',
               'line': line
@@ -96,8 +96,8 @@ class Lexer {
           lastIndents = indents;
         }
       }
-      if (token !== null) {
-        if (token['type'] !== 'silentComment') {
+      if (token != null) {
+        if (token['type'] != 'silentComment') {
           tokens.add(token);
         }
         token = null;

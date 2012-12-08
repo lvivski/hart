@@ -34,7 +34,7 @@ class Parser {
   get block {
     StringBuffer buff = new StringBuffer();
     next;
-    while (peek['type'] !== 'outdent' && peek['type'] !== 'eof') {
+    while (peek['type'] != 'outdent' && peek['type'] != 'eof') {
       buff.add(expr);
     }
     outdent;
@@ -46,7 +46,7 @@ class Parser {
     num indents = 1;
     StringBuffer buff = new StringBuffer();
     next;
-    while (peek['type'] !== 'eof' && indents > 0) {
+    while (peek['type'] != 'eof' && indents > 0) {
       switch((token = next)['type']) {
         case 'newline':
           buff.add(r'\n');
@@ -59,7 +59,7 @@ class Parser {
           break;
         case 'outdent':
           --indents;
-          if (indents === 1) {
+          if (indents == 1) {
             buff.add(r'\n');
           }
           break;
@@ -74,7 +74,7 @@ class Parser {
     List attributes = ['attrs', 'class', 'id'];
     List classes = [];
     List buff = [];
-    while (attributes.indexOf(peek['type']) !== -1) {
+    while (attributes.indexOf(peek['type']) != -1) {
       switch (peek['type']) {
         case 'id':
           buff.add(" 'id': '${next['val']}' ");
@@ -100,7 +100,7 @@ class Parser {
 
   get tag {
     String tagName = next['val'];
-    bool selfClosing = Lexer.selfClosingTags.indexOf(tagName) !== -1;
+    bool selfClosing = Lexer.selfClosingTags.indexOf(tagName) != -1;
     StringBuffer buff = new StringBuffer('\\n<${tagName}${attrs}${selfClosing ? '/' : ''}>');
     switch (peek['type']) {
       case 'text':
@@ -144,19 +144,19 @@ class Parser {
 
   get conditionalComment {
     var condition= next['val'];
-    var buff = peek['type'] === 'indent' ? block : expr;
+    var buff = peek['type'] == 'indent' ? block : expr;
     return '<!--${condition}>${buff.toString()}<![endif]-->';
   }
 
   get comment {
     next;
-    var buff = peek['type'] === 'indent' ? block : expr;
+    var buff = peek['type'] == 'indent' ? block : expr;
     return '<!-- ${buff.toString()} -->';
   }
 
   get code {
     var code = next['val'];
-    if (peek['type'] === 'indent') {
+    if (peek['type'] == 'indent') {
       return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${block}");\nreturn buff.toString();\n}()}';
     }
     return '\${(){\n${code};return'';\n}()}';
@@ -164,7 +164,7 @@ class Parser {
 
   get filter {
     var filter = next['val'];
-    if (peek['type'] !== 'indent') {
+    if (peek['type'] != 'indent') {
       throw new Exception("filter '${filter}' expects a text block");
     }
     return "\${Filters.${filter}('${textBlock}')}";
@@ -172,7 +172,7 @@ class Parser {
 
   get iterate {
     var each = next;
-    if (peek['type'] !== 'indent') {
+    if (peek['type'] != 'indent') {
       throw new Exception("'- each' expects a block, but got ${peek['type']}");
     }
     return "\${(){\nStringBuffer buff=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuff.add(\"${block}\");\n});return buff.toString();\n}()}";
@@ -188,9 +188,9 @@ class Parser {
         return tag;
       case 'text':
         StringBuffer buff = new StringBuffer();
-        while (peek['type'] === 'text') {
+        while (peek['type'] == 'text') {
           buff.add(" ${next['val'].trim()}");
-          if (peek['type'] === 'newline') {
+          if (peek['type'] == 'newline') {
             next;
           }
         }
@@ -225,7 +225,7 @@ class Parser {
 
   get parsed {
     StringBuffer buff = new StringBuffer();
-    while (peek['type'] !== 'eof') {
+    while (peek['type'] != 'eof') {
       buff.add(this.expr);
     }
     return buff.toString();

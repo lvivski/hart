@@ -31,7 +31,7 @@ main(){
       article text here
       and here
 '''};
-  
+
   new File('example/views.dart').open(FileMode.WRITE).then((file) {
     file.writeString(Hart.compile(templates));
   });

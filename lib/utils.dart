@@ -11,10 +11,10 @@ attrs (Map attrMap) {
   StringBuffer buf = new StringBuffer();
   for (var key in attrMap.keys) {
     if (attrMap[key] is bool) {
-      if (attrMap[key] === true) {
+      if (attrMap[key] == true) {
         buf.add(' ${key}="${key}"');
       }
-    } else if (attrMap[key] !== null) {
+    } else if (attrMap[key] != null) {
       buf.add(' ${key}="${escape(attrMap[key])}"');
     }
   }
