@@ -1,5 +1,7 @@
 # Hart
-Haml implementation in Dart
+The heart of any Dart app
+
+Templates are similar to HAML but without `%` before each tag.
 
 ## Usage
 Dart doesn't allow any code evaluation so you have to precompile all your templates

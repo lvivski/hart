@@ -29,7 +29,7 @@ class Lexer {
     'conditionalComment': new RegExp(r'^\/(\[[^\n]+\])'),
     'comment'           : new RegExp(r'^\n? *\/ *'),
     'silentComment'     : new RegExp(r'^\n? *-#([^\n]*)'),
-    'doctype'           : new RegExp(r'^!!! *([^\n]*)'),
+    'doctype'           : new RegExp(r'^doctype *([^\n]*)'),
     'escape'            : new RegExp(r'^\\(.)'),
     'filter'            : new RegExp(r'^:(\w+) *'),
     'each'              : new RegExp(r'^\- *each *(\w+)(?: *, *(\w+))? * in ([^\n]+)'),
@@ -37,7 +37,7 @@ class Lexer {
     'outputCode'        : new RegExp(r'^!=([^\n]+)'),
     'escapeCode'        : new RegExp(r'^=([^\n]+)'),
     'attrs'             : new RegExp(r'^\{(.*?)\}'),
-    'tag'               : new RegExp(r'^%([-a-zA-Z][-a-zA-Z0-9:]*)'),
+    'tag'               : new RegExp(r'^([-a-zA-Z][-a-zA-Z0-9:]*)'),
     'class'             : new RegExp(r'^\.([\w\-]+)'),
     'id'                : new RegExp(r'^\#([\w\-]+)'),
     'text'              : new RegExp(r'^([^\n]+)')
