@@ -2,3 +2,4 @@
 /.project
 packages
 /pubspec.lock
+/example/views.dart
