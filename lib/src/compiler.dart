@@ -10,14 +10,14 @@ class ${className}View extends View {
   ${className}View(this.locals);
 
   noSuchMethod(mirror) {
-    if (locals === null) {
+    if (locals == null) {
       locals = {};
     }
     if (mirror.memberName.length > 4) {
-      String name = mirror.memberName;
-      List args = mirror.positionalArguments;
-      String prefix = name.substring(0, 4);
-      String key = name.substring(4);
+      var name = mirror.memberName,
+          args = mirror.positionalArguments,
+          prefix = name.substring(0, 4),
+          key = name.substring(4);
       if (prefix == "get:") {
         return locals[key];
       } else if (prefix == "set:") {
