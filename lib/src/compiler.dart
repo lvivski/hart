@@ -1,7 +1,7 @@
 library compiler;
 
 class Compiler {
-  static _getClass(String className, String data) {
+  static String _getClass(String className, String data) {
     return """
 
 class ${className}View extends View {
@@ -35,7 +35,7 @@ $data
 """;
   }
 
-  static _getMain(Map templates) {
+  static String _getMain(Map templates) {
     var buff = new StringBuffer('''
 
 class View {
@@ -64,7 +64,7 @@ class View {
     return buff.toString();
   }
 
-  static compile(Map templates) {
+  static String compile(Map templates) {
     StringBuffer buff = new StringBuffer('''
 library view;
 import 'package:hart/utils.dart';

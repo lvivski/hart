@@ -46,11 +46,11 @@ class Lexer {
 
   static List tokenize(String str) {
     str = str.trim().replaceAll(new RegExp(r'\r\n|\r'), '\n');
+    var line = 1,
+        lastIndents = 0,
+        tokens = [];
     Match matches;
     Map token;
-    int line = 1;
-    num lastIndents = 0;
-    List tokens = [];
     while (str.length > 0) {
       for (String type in rules.keys) {
         matches = rules[type].firstMatch(str);

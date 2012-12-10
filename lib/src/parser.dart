@@ -4,15 +4,15 @@ import 'lexer.dart';
 
 class Parser {
   List tokens;
-  Map current;
+  Map<String,String> current;
 
   Parser(string) {
     this.tokens = Lexer.tokenize(string);
   }
 
-  Map get peek => tokens[0];
+  Map<String,String> get peek => tokens[0];
 
-  Map get next {
+  Map<String,String> get next {
     current = tokens[0];
     tokens.removeRange(0,1);
     return current;
@@ -32,7 +32,7 @@ class Parser {
   String _text() => next['val'].trim();
 
   StringBuffer _block() {
-    StringBuffer buff = new StringBuffer();
+    var buff = new StringBuffer();
     next;
     while (peek['type'] != 'outdent' && peek['type'] != 'eof') {
       buff.add(_expr());
@@ -42,9 +42,9 @@ class Parser {
   }
 
   StringBuffer _textBlock() {
+    var indents = 1,
+        buff = new StringBuffer();
     Map token;
-    num indents = 1;
-    StringBuffer buff = new StringBuffer();
     next;
     while (peek['type'] != 'eof' && indents > 0) {
       switch((token = next)['type']) {
@@ -71,9 +71,9 @@ class Parser {
   }
 
   _attrs() {
-    List attributes = ['attrs', 'class', 'id'];
-    List classes = [];
-    List buff = [];
+    var attributes = ['attrs', 'class', 'id'],
+        classes = [],
+        buff = [];
     while (attributes.indexOf(peek['type']) != -1) {
       switch (peek['type']) {
         case 'id':
@@ -99,9 +99,9 @@ class Parser {
   }
 
   _tag() {
-    String tagName = next['val'];
-    bool selfClosing = Lexer.selfClosingTags.indexOf(tagName) != -1;
-    StringBuffer buff = new StringBuffer('\\n<${tagName}${_attrs()}${selfClosing ? '/' : ''}>');
+    var tagName = next['val'],
+        selfClosing = Lexer.selfClosingTags.indexOf(tagName) != -1,
+        buff = new StringBuffer('\\n<${tagName}${_attrs()}${selfClosing ? '/' : ''}>');
     switch (peek['type']) {
       case 'text':
         buff.add(_text());
@@ -133,7 +133,7 @@ class Parser {
   String _escapeCode() => '\${escape(${next['val'].trim()})}';
 
   String _doctype() {
-    String type = next['val'].trim().toLowerCase();
+    var type = next['val'].trim().toLowerCase();
     type = type.length > 0 ? type : 'default';
     if (Lexer.doctypes.containsKey(type)) {
       return Lexer.doctypes[type].replaceAll(new RegExp(r'"'), '\\"');
@@ -143,19 +143,19 @@ class Parser {
   }
 
   String _conditionalComment() {
-    String condition= next['val'];
-    StringBuffer buff = peek['type'] == 'indent' ? _block() : _expr();
+    var condition= next['val'],
+        buff = peek['type'] == 'indent' ? _block() : _expr();
     return '<!--${condition}>${buff.toString()}<![endif]-->';
   }
 
   String _comment() {
     next;
-    StringBuffer buff = peek['type'] == 'indent' ? _block() : _expr();
+    var buff = peek['type'] == 'indent' ? _block() : _expr();
     return '<!-- ${buff.toString()} -->';
   }
 
   String _code() {
-    String code = next['val'];
+    var code = next['val'];
     if (peek['type'] == 'indent') {
       return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${_block()}");\nreturn buff.toString();\n}()}';
     }
@@ -163,7 +163,7 @@ class Parser {
   }
 
   String _filter() {
-    String filter = next['val'];
+    var filter = next['val'];
     if (peek['type'] != 'indent') {
       throw new Exception("filter '${filter}' expects a text block");
     }
@@ -171,7 +171,7 @@ class Parser {
   }
 
   String _iterate() {
-    Map each = next;
+    var each = next;
     if (peek['type'] != 'indent') {
       throw new Exception("'- each' expects a block, but got ${peek['type']}");
     }
@@ -187,7 +187,7 @@ class Parser {
       case 'tag':
         return _tag();
       case 'text':
-        StringBuffer buff = new StringBuffer();
+        var buff = new StringBuffer();
         while (peek['type'] == 'text') {
           buff.add(" ${next['val'].trim()}");
           if (peek['type'] == 'newline') {
@@ -224,7 +224,7 @@ class Parser {
   }
 
   String get parsed {
-    StringBuffer buff = new StringBuffer();
+    var buff = new StringBuffer();
     while (peek['type'] != 'eof') {
       buff.add(_expr());
     }
