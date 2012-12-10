@@ -18,7 +18,7 @@ class Parser {
     return current;
   }
 
-  get outdent {
+  _outdent() {
     switch(peek['type']) {
       case 'eof':
         return;
@@ -29,19 +29,19 @@ class Parser {
     }
   }
 
-  get text => next['val'].trim();
+  _text() => next['val'].trim();
 
-  get block {
+  _block() {
     StringBuffer buff = new StringBuffer();
     next;
     while (peek['type'] != 'outdent' && peek['type'] != 'eof') {
-      buff.add(expr);
+      buff.add(_expr());
     }
-    outdent;
+    _outdent();
     return buff;
   }
 
-  get textBlock {
+  _textBlock() {
     var token;
     num indents = 1;
     StringBuffer buff = new StringBuffer();
@@ -70,7 +70,7 @@ class Parser {
     return buff;
   }
 
-  get attrs {
+  _attrs() {
     List attributes = ['attrs', 'class', 'id'];
     List classes = [];
     List buff = [];
@@ -98,28 +98,28 @@ class Parser {
         "\${attrs({${Strings.join(buff, ',')}})}" : '';
   }
 
-  get tag {
+  _tag() {
     String tagName = next['val'];
     bool selfClosing = Lexer.selfClosingTags.indexOf(tagName) != -1;
-    StringBuffer buff = new StringBuffer('\\n<${tagName}${attrs}${selfClosing ? '/' : ''}>');
+    StringBuffer buff = new StringBuffer('\\n<${tagName}${_attrs()}${selfClosing ? '/' : ''}>');
     switch (peek['type']) {
       case 'text':
-        buff.add(text);
+        buff.add(_text());
         break;
       case 'conditionalComment':
-        buff.add(conditionalComment);
+        buff.add(_conditionalComment());
         break;
       case 'comment':
-        buff.add(comment);
+        buff.add(_comment());
         break;
       case 'outputCode':
-        buff.add(outputCode);
+        buff.add(_outputCode());
         break;
       case 'escapeCode':
-        buff.add(escapeCode);
+        buff.add(_escapeCode());
         break;
       case 'indent':
-        buff.add(block);
+        buff.add(_block());
         break;
     }
     if (!selfClosing) {
@@ -128,11 +128,11 @@ class Parser {
     return buff;
   }
 
-  get outputCode => next['val'];
+  _outputCode() => next['val'];
 
-  get escapeCode => '\${escape(${next['val'].trim()})}';
+  _escapeCode() => '\${escape(${next['val'].trim()})}';
 
-  get doctype {
+  _doctype() {
     String type = next['val'].trim().toLowerCase();
     type = type.length > 0 ? type : 'default';
     if (Lexer.doctypes.containsKey(type)) {
@@ -142,50 +142,50 @@ class Parser {
     }
   }
 
-  get conditionalComment {
+  _conditionalComment() {
     var condition= next['val'];
-    var buff = peek['type'] == 'indent' ? block : expr;
+    var buff = peek['type'] == 'indent' ? _block() : _expr();
     return '<!--${condition}>${buff.toString()}<![endif]-->';
   }
 
-  get comment {
+  _comment() {
     next;
-    var buff = peek['type'] == 'indent' ? block : expr;
+    var buff = peek['type'] == 'indent' ? _block() : _expr();
     return '<!-- ${buff.toString()} -->';
   }
 
-  get code {
+  _code() {
     var code = next['val'];
     if (peek['type'] == 'indent') {
-      return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${block}");\nreturn buff.toString();\n}()}';
+      return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${_block()}");\nreturn buff.toString();\n}()}';
     }
     return '\${(){\n${code};return'';\n}()}';
   }
 
-  get filter {
+  _filter() {
     var filter = next['val'];
     if (peek['type'] != 'indent') {
       throw new Exception("filter '${filter}' expects a text block");
     }
-    return "\${Filters.${filter}('${textBlock}')}";
+    return "\${Filters.${filter}('${_textBlock()}')}";
   }
 
-  get iterate {
+  _iterate() {
     var each = next;
     if (peek['type'] != 'indent') {
       throw new Exception("'- each' expects a block, but got ${peek['type']}");
     }
-    return "\${(){\nStringBuffer buff=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuff.add(\"${block}\");\n});return buff.toString();\n}()}";
+    return "\${(){\nStringBuffer buff=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuff.add(\"${_block()}\");\n});return buff.toString();\n}()}";
   }
 
-  get expr {
+  _expr() {
     switch (peek['type']) {
       case 'id':
       case 'class':
         tokens.insertRange(0, 1, { 'type': 'tag', 'val': 'div' });
-        return tag;
+        return _tag();
       case 'tag':
-        return tag;
+        return _tag();
       case 'text':
         StringBuffer buff = new StringBuffer();
         while (peek['type'] == 'text') {
@@ -196,28 +196,28 @@ class Parser {
         }
         return buff;
       case 'each':
-        return iterate;
+        return _iterate();
       case 'code':
-        return code;
+        return _code();
       case 'escape':
         return next['val'];
       case 'doctype':
-        return doctype;
+        return _doctype();
       case 'filter':
-        return filter;
+        return _filter();
       case 'conditionalComment':
-        return conditionalComment;
+        return _conditionalComment();
       case 'comment':
-        return comment;
+        return _comment();
       case 'escapeCode':
-        return escapeCode;
+        return _escapeCode();
       case 'outputCode':
-        return outputCode;
+        return _outputCode();
       case 'newline':
       case 'indent':
       case 'outdent':
         next;
-        return expr;
+        return _expr();
       default:
         throw new Exception('unexpected ${peek['type']}');
     }
@@ -226,7 +226,7 @@ class Parser {
   get parsed {
     StringBuffer buff = new StringBuffer();
     while (peek['type'] != 'eof') {
-      buff.add(this.expr);
+      buff.add(_expr());
     }
     return buff.toString();
   }
