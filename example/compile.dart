@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../lib/hart.dart';
+import 'package:hart/hart.dart';
 
 main(){
   var templates = {
