@@ -47,12 +47,12 @@ class Lexer {
   static List tokenize(String str) {
     str = str.trim().replaceAll(new RegExp(r'\r\n|\r'), '\n');
     Match matches;
-    var token;
+    Map token;
     int line = 1;
     num lastIndents = 0;
     List tokens = [];
     while (str.length > 0) {
-      for (var type in rules.keys) {
+      for (String type in rules.keys) {
         matches = rules[type].firstMatch(str);
         if (matches != null) {
           List matchesList = [];
@@ -71,7 +71,7 @@ class Lexer {
           } else {
             break;
           }
-          var indents = token['val'].length / 2;
+          num indents = token['val'].length / 2;
           if (indents % 1 > 0) {
             throw new Exception("invalid indentation; got ${token['val'].length} spaces, should be multiple of 2");
           } else if (indents - 1 > lastIndents) {

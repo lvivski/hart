@@ -10,18 +10,18 @@ class Parser {
     this.tokens = Lexer.tokenize(string);
   }
 
-  get peek => tokens[0];
+  Map get peek => tokens[0];
 
-  get next {
+  Map get next {
     current = tokens[0];
     tokens.removeRange(0,1);
     return current;
   }
 
-  _outdent() {
+  Map _outdent() {
     switch(peek['type']) {
       case 'eof':
-        return;
+        return null;
       case 'outdent':
         return next;
       default:
@@ -29,9 +29,9 @@ class Parser {
     }
   }
 
-  _text() => next['val'].trim();
+  String _text() => next['val'].trim();
 
-  _block() {
+  StringBuffer _block() {
     StringBuffer buff = new StringBuffer();
     next;
     while (peek['type'] != 'outdent' && peek['type'] != 'eof') {
@@ -41,8 +41,8 @@ class Parser {
     return buff;
   }
 
-  _textBlock() {
-    var token;
+  StringBuffer _textBlock() {
+    Map token;
     num indents = 1;
     StringBuffer buff = new StringBuffer();
     next;
@@ -128,11 +128,11 @@ class Parser {
     return buff;
   }
 
-  _outputCode() => next['val'];
+  String _outputCode() => next['val'];
 
-  _escapeCode() => '\${escape(${next['val'].trim()})}';
+  String _escapeCode() => '\${escape(${next['val'].trim()})}';
 
-  _doctype() {
+  String _doctype() {
     String type = next['val'].trim().toLowerCase();
     type = type.length > 0 ? type : 'default';
     if (Lexer.doctypes.containsKey(type)) {
@@ -142,36 +142,36 @@ class Parser {
     }
   }
 
-  _conditionalComment() {
-    var condition= next['val'];
-    var buff = peek['type'] == 'indent' ? _block() : _expr();
+  String _conditionalComment() {
+    String condition= next['val'];
+    StringBuffer buff = peek['type'] == 'indent' ? _block() : _expr();
     return '<!--${condition}>${buff.toString()}<![endif]-->';
   }
 
-  _comment() {
+  String _comment() {
     next;
-    var buff = peek['type'] == 'indent' ? _block() : _expr();
+    StringBuffer buff = peek['type'] == 'indent' ? _block() : _expr();
     return '<!-- ${buff.toString()} -->';
   }
 
-  _code() {
-    var code = next['val'];
+  String _code() {
+    String code = next['val'];
     if (peek['type'] == 'indent') {
       return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${_block()}");\nreturn buff.toString();\n}()}';
     }
     return '\${(){\n${code};return'';\n}()}';
   }
 
-  _filter() {
-    var filter = next['val'];
+  String _filter() {
+    String filter = next['val'];
     if (peek['type'] != 'indent') {
       throw new Exception("filter '${filter}' expects a text block");
     }
     return "\${Filters.${filter}('${_textBlock()}')}";
   }
 
-  _iterate() {
-    var each = next;
+  String _iterate() {
+    Map each = next;
     if (peek['type'] != 'indent') {
       throw new Exception("'- each' expects a block, but got ${peek['type']}");
     }
@@ -223,7 +223,7 @@ class Parser {
     }
   }
 
-  get parsed {
+  String get parsed {
     StringBuffer buff = new StringBuffer();
     while (peek['type'] != 'eof') {
       buff.add(_expr());
