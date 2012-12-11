@@ -1,6 +1,8 @@
 # Hart
 The heart of any Dart app
 
+![](https://drone.io/lvivski/hart/status.png)
+
 Templates are similar to HAML but without `%` before each tag.
 
 ## Usage
