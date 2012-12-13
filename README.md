@@ -1,7 +1,7 @@
 # Hart
 The heart of any Dart app
 
-![](https://drone.io/lvivski/hart/status.png)
+[![](https://drone.io/lvivski/hart/status.png)](https://drone.io/lvivski/hart/latest)
 
 Templates are similar to HAML but without `%` before each tag.
 
