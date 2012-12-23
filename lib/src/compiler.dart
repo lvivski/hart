@@ -13,16 +13,8 @@ class ${className}View extends View {
     if (locals == null) {
       locals = {};
     }
-    if (mirror.memberName.length > 4) {
-      var name = mirror.memberName,
-          args = mirror.positionalArguments,
-          prefix = name.substring(0, 4),
-          key = name.substring(4);
-      if (prefix == "get:") {
-        return locals[key];
-      } else if (prefix == "set:") {
-        locals[key] = args[0];
-      }
+    if (mirror.isGetter) {
+      return locals[mirror.memberName];
     }
   }
 

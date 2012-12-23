@@ -65,6 +65,7 @@ class Parser {
           break;
         default:
           buff.add(token['match'].replaceAll(new RegExp(r'"'), r'\"'));
+          break;
       }
     }
     return buff;
@@ -83,9 +84,10 @@ class Parser {
           classes.add(next['val']);
           break;
         case 'attrs':
-          var matches = new RegExp(r'(\w+) *:', ignoreCase:true).allMatches(next['val']);
+          var matches = new RegExp(r'(\w+) *=', ignoreCase:true).allMatches(next['val']);
           for (Match match in matches) {
-            current['val'] = current['val'].replaceAll(match[1], "'${match[1]}'");
+            current['val'] = current['val'].replaceAll(match[1], "'${match[1]}'")
+                                           .replaceFirst('=', ':');
           }
           buff.add(current['val']);
           break;
@@ -159,7 +161,7 @@ class Parser {
     if (peek['type'] == 'indent') {
       return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${_block()}");\nreturn buff.toString();\n}()}';
     }
-    return '\${(){\n${code};return'';\n}()}';
+    return '\${(){\n${code};return \'\';\n}()}';
   }
 
   String _filter() {

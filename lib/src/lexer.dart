@@ -37,7 +37,7 @@ class Lexer {
     'code'              : new RegExp(r'^\-([^\n]+)'),
     'outputCode'        : new RegExp(r'^!=([^\n]+)'),
     'escapeCode'        : new RegExp(r'^=([^\n]+)'),
-    'attrs'             : new RegExp(r'^\{(.*?)\}'),
+    'attrs'             : new RegExp(r'^\[(.*?)\]'),
     'tag'               : new RegExp(r'^([-a-zA-Z][-a-zA-Z0-9:]*)'),
     'class'             : new RegExp(r'^\.([\w\-]+)'),
     'id'                : new RegExp(r'^\#([\w\-]+)'),
