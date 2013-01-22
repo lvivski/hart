@@ -1,5 +1,5 @@
 name: hart
-version: 0.0.3+hotfix.deps
+version: 0.0.4
 description: Hart — the heart of any Dart app
 author: Yehor Lvivski <lvivski@gmail.com>
 homepage: http://github.com/lvivski/hart

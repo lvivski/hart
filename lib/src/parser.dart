@@ -84,7 +84,7 @@ class Parser {
           classes.add(next['val']);
           break;
         case 'attrs':
-          var matches = new RegExp(r'(\w+) *=', ignoreCase:true).allMatches(next['val']);
+          var matches = new RegExp(r'(\w+) *=', caseSensitive:false).allMatches(next['val']);
           for (Match match in matches) {
             current['val'] = current['val'].replaceAll(match[1], "'${match[1]}'")
                                            .replaceFirst('=', ':');

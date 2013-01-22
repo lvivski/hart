@@ -71,6 +71,6 @@ import 'package:hart/utils.dart';
   }
 
   static String camelize(String name) {
-    return Strings.join(name.split(new RegExp(r'-|_')).map((part) => part[0].toUpperCase().concat(part.substring(1))), '');
+    return Strings.join(name.split(new RegExp(r'-|_')).mappedBy((part) => part[0].toUpperCase().concat(part.substring(1))), '');
   }
 }

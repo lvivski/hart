@@ -19,7 +19,7 @@ void main() {
     });
 
     test('attrs parse', () {
-      expect(Hart.parse("link{ rel: 'stylesheet', href: '/stylesheets/main.css', type: 'text/css'}"), equals(r"\n<link${attrs({ 'rel': 'stylesheet', 'href': '/stylesheets/main.css', 'type': 'text/css'})}/>"));
+      expect(Hart.parse("link[rel='stylesheet', href='/stylesheets/main.css', type='text/css']"), equals(r"\n<link${attrs({'rel':'stylesheet', 'href':'/stylesheets/main.css', 'type':'text/css'})}/>"));
     });
 
     test('class', () {
