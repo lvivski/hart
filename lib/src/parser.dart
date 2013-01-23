@@ -50,12 +50,12 @@ class Parser {
       switch((token = next)['type']) {
         case 'newline':
           buff.add(r'\n');
-          buff.add(Strings.join(new List(indents), ' '));
+          buff.add(Strings.join(new List.fixedLength(indents), ' '));
           break;
         case 'indent':
           ++indents;
           buff.add(r'\n');
-          buff.add(Strings.join(new List(indents), ' '));
+          buff.add(Strings.join(new List.fixedLength(indents), ' '));
           break;
         case 'outdent':
           --indents;
