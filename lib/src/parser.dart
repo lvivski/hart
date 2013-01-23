@@ -50,12 +50,12 @@ class Parser {
       switch((token = next)['type']) {
         case 'newline':
           buff.add(r'\n');
-          buff.add(Strings.join(new List.fixedLength(indents), ' '));
+          buff.add(new List.fixedLength(indents).join(' '));
           break;
         case 'indent':
           ++indents;
           buff.add(r'\n');
-          buff.add(Strings.join(new List.fixedLength(indents), ' '));
+          buff.add(new List.fixedLength(indents).join(' '));
           break;
         case 'outdent':
           --indents;
@@ -94,10 +94,10 @@ class Parser {
       }
     }
     if (classes.length > 0) {
-      buff.add(" 'class': '${Strings.join(classes, ' ')}' ");
+      buff.add(" 'class': '${classes.join(' ')}' ");
     }
     return buff.length > 0 ?
-        "\${attrs({${Strings.join(buff, ',')}})}" : '';
+        "\${attrs({${buff.join(',')}})}" : '';
   }
 
   _tag() {
