@@ -1,7 +1,7 @@
 name: hart
-version: 0.0.3+hotfix.m3
-description: Hart — the heart of any Dart app
+version: 0.0.4
 author: Yehor Lvivski <lvivski@gmail.com>
+description: Hart — the heart of any Dart app
 homepage: http://github.com/lvivski/hart
 dependencies:
-  unittest: ">=0.2.7"
+  unittest: '>=0.2.7'
