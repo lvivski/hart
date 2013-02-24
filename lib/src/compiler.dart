@@ -47,9 +47,9 @@ class View {
   View() {
 ''');
     templates.keys.forEach((key) {
-      buff.add("    register('$key', (params) => new ${camelize(key)}View(params));\n");
+      buff.write("    register('$key', (params) => new ${camelize(key)}View(params));\n");
     });
-    buff.add('''
+    buff.write('''
    }
 }
 ''');
@@ -62,15 +62,15 @@ library view;
 import 'package:hart/utils.dart';
 ''');
     templates.keys.forEach((key) {
-      buff.add(_getClass(camelize(key), templates[key]));
+      buff.write(_getClass(camelize(key), templates[key]));
     });
 
-    buff.add(_getMain(templates));
+    buff.write(_getMain(templates));
 
     return buff.toString();
   }
 
   static String camelize(String name) {
-    return name.split(new RegExp(r'-|_')).mappedBy((part) => part[0].toUpperCase().concat(part.substring(1))).join('');
+    return name.split(new RegExp(r'-|_')).map((part) => part[0].toUpperCase().concat(part.substring(1))).join('');
   }
 }

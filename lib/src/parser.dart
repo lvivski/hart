@@ -35,7 +35,7 @@ class Parser {
     var buff = new StringBuffer();
     next;
     while (peek['type'] != 'outdent' && peek['type'] != 'eof') {
-      buff.add(_expr());
+      buff.write(_expr());
     }
     _outdent();
     return buff;
@@ -49,22 +49,22 @@ class Parser {
     while (peek['type'] != 'eof' && indents > 0) {
       switch((token = next)['type']) {
         case 'newline':
-          buff.add(r'\n');
-          buff.add(new List.fixedLength(indents).join(' '));
+          buff.write(r'\n');
+          buff.write(new List.fixedLength(indents).join(' '));
           break;
         case 'indent':
           ++indents;
-          buff.add(r'\n');
-          buff.add(new List.fixedLength(indents).join(' '));
+          buff.write(r'\n');
+          buff.write(new List.fixedLength(indents).join(' '));
           break;
         case 'outdent':
           --indents;
           if (indents == 1) {
-            buff.add(r'\n');
+            buff.write(r'\n');
           }
           break;
         default:
-          buff.add(token['match'].replaceAll(new RegExp(r'"'), r'\"'));
+          buff.write(token['match'].replaceAll(new RegExp(r'"'), r'\"'));
           break;
       }
     }
@@ -106,26 +106,26 @@ class Parser {
         buff = new StringBuffer('\\n<${tagName}${_attrs()}${selfClosing ? '/' : ''}>');
     switch (peek['type']) {
       case 'text':
-        buff.add(_text());
+        buff.write(_text());
         break;
       case 'conditionalComment':
-        buff.add(_conditionalComment());
+        buff.write(_conditionalComment());
         break;
       case 'comment':
-        buff.add(_comment());
+        buff.write(_comment());
         break;
       case 'outputCode':
-        buff.add(_outputCode());
+        buff.write(_outputCode());
         break;
       case 'escapeCode':
-        buff.add(_escapeCode());
+        buff.write(_escapeCode());
         break;
       case 'indent':
-        buff.add(_block());
+        buff.write(_block());
         break;
     }
     if (!selfClosing) {
-      buff.add('</${tagName}>');
+      buff.write('</${tagName}>');
     }
     return buff;
   }
@@ -159,7 +159,7 @@ class Parser {
   String _code() {
     var code = next['val'];
     if (peek['type'] == 'indent') {
-      return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.add("${_block()}");\nreturn buff.toString();\n}()}';
+      return '\${(){\nStringBuffer buff=new StringBuffer();\n${code}\nbuff.write("${_block()}");\nreturn buff.toString();\n}()}';
     }
     return '\${(){\n${code};return \'\';\n}()}';
   }
@@ -177,7 +177,7 @@ class Parser {
     if (peek['type'] != 'indent') {
       throw new Exception("'- each' expects a block, but got ${peek['type']}");
     }
-    return "\${(){\nStringBuffer buff=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuff.add(\"${_block()}\");\n});return buff.toString();\n}()}";
+    return "\${(){\nStringBuffer buff=new StringBuffer();\n${each['val'][2]}.forEach((${each['val'][0]}){\nbuff.write(\"${_block()}\");\n});return buff.toString();\n}()}";
   }
 
   _expr() {
@@ -191,7 +191,7 @@ class Parser {
       case 'text':
         var buff = new StringBuffer();
         while (peek['type'] == 'text') {
-          buff.add(" ${next['val'].trim()}");
+          buff.write(" ${next['val'].trim()}");
           if (peek['type'] == 'newline') {
             next;
           }
@@ -228,7 +228,7 @@ class Parser {
   String get parsed {
     var buff = new StringBuffer();
     while (peek['type'] != 'eof') {
-      buff.add(_expr());
+      buff.write(_expr());
     }
     return buff.toString();
   }

@@ -23,10 +23,10 @@ html
       li
         ul
           li nested
-  - if (items != null)
-    ul
-      - each item in items
-        li= item
+    - if (items != null)
+      ul
+        - each item in items
+          li= item
     div.article.first
       article text here
 '''};
