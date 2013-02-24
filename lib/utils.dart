@@ -12,10 +12,10 @@ String attrs (Map attrMap) {
   for (var key in attrMap.keys) {
     if (attrMap[key] is bool) {
       if (attrMap[key] == true) {
-        buf.add(' ${key}="${key}"');
+        buf.write(' ${key}="${key}"');
       }
     } else if (attrMap[key] != null) {
-      buf.add(' ${key}="${escape(attrMap[key])}"');
+      buf.write(' ${key}="${escape(attrMap[key])}"');
     }
   }
   return buf.toString();
