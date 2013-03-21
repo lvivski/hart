@@ -23,7 +23,7 @@ html
     h1.markup Markup examples
     #content
       p This example shows you how a basic Hart file looks like.
-		- if (items != null)
+    - if (items != null)
       ul
         - each item in items
           li= item
