@@ -6,14 +6,61 @@ The heart of any Dart app
 Templates are similar to HAML but without `%` before each tag.
 
 ## Usage
-Dart doesn't allow any code evaluation so you have to precompile all your templates
+Dart doesn't allow any code evaluation so you have to precompile all your templates.
 
-You can find the usage code in `example` folder.
-
-Run `dart compile.dart` first and then `dart run.dart`
+Template example:
+```haml
+doctype html
+html
+  head
+    title= title
+    meta[name="keywords", content="template language"]
+    meta[name="author", content=author]
+    script
+      :cdata
+        alert("Hart supports embedded javascript!")
+  body
+    h1.markup Markup examples
+    #content
+      p This example shows you how a basic Hart file looks like.
+		- if (items != null)
+      ul
+        - each item in items
+          li= item
+    div#footer Copyright &copy; 2013
+```
+Then you have to compile your template. Basic compiler is in `examples/compile.dart`. After compilation you can run it with
+```dart
+var view = new View();
+view.render('index', {
+  'title': 'Hart Examples',
+  'items': ['first', 'second', 'third']
+});
+```
+so you'll get
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hart Examples</title>
+<meta name="keywords" content="template language"/>
+<meta name="author"/>
+<script><![CDATA[
+alert("Hart supports embedded javascript!")
+]]></script></head>
+<body>
+<h1 class="markup">Markup examples</h1>
+<div id="content">
+<p>This example shows you how a basic Hart file looks like.</p></div>
+<ul>
+<li>first</li>
+<li>second</li>
+<li>third</li></ul>
+<div id="footer">Copyright &copy; 2013</div></body></html>
+```
+See [example](example) as a reference.
 
 ## License
-
 (The MIT License)
 
 Copyright (c) 2012 Yehor Lvivski <lvivski@gmail.com>
