@@ -1,5 +1,5 @@
 name: hart
-version: 0.0.4
+version: 0.0.4+1
 author: Yehor Lvivski <lvivski@gmail.com>
 description: Hart — the heart of any Dart app
 homepage: http://github.com/lvivski/hart
