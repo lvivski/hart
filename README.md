@@ -9,7 +9,7 @@ Templates are similar to HAML but without `%` before each tag.
 Dart doesn't allow any code evaluation so you have to precompile all your templates.
 
 Template example:
-```haml
+```jade
 doctype html
 html
   head
