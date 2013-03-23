@@ -1,5 +1,5 @@
-/.children
-/.project
+.children
+.project
 packages
-/pubspec.lock
+pubspec.lock
 /example/views.dart
