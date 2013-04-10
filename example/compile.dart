@@ -25,7 +25,7 @@ html
     div#footer Copyright &copy; 2013
 '''};
 
-  new File('example/views.dart').open(FileMode.WRITE).then((file) {
+  new File('example/views.dart').open(mode: FileMode.WRITE).then((file) {
     file.writeString(Hart.compile(templates));
   });
 }
