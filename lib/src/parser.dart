@@ -130,7 +130,7 @@ class Parser {
     return buff;
   }
 
-  String _outputCode() => next['val'];
+  String _outputCode() => '\${${next['val'].trim()}';
 
   String _escapeCode() => '\${escape(${next['val'].trim()})}';
 
