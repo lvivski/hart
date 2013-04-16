@@ -27,17 +27,17 @@ $data
 """;
   }
 
-  static String _getMain(Map templates) {
+  static String _getMain(Map<String,String> templates) {
     var buff = new StringBuffer('''
 
 class View {
   Map _views;
 
-  render(name, params) {
+  render(String name, Map params) {
     return _views[name](params).get();
   }
 
-  register(name, handler) {
+  register(String name, handler(Map params)) {
     if (_views == null) {
       _views = {};
     }
@@ -56,7 +56,7 @@ class View {
     return buff.toString();
   }
 
-  static String compile(Map templates) {
+  static String compile(Map<String,String> templates) {
     StringBuffer buff = new StringBuffer('''
 library view;
 import 'package:hart/utils.dart';

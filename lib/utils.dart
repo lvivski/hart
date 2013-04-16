@@ -1,13 +1,11 @@
 library utils;
 
-class Filters {
-  static String plain (str) => str;
-  static String cdata (str) => '<![CDATA[\n${str}\n]]>';
-  static String css (str) => '<style type"text/css">\n/*<![CDATA[*/\n${str}\n/*]]>*/</style>';
-  static String javascript (str) => '<script type="text/javascript">\n//<![CDATA[\n${str}\n//]]></script>';
-}
+plain (String str) => str;
+cdata (String str) => '<![CDATA[\n$str\n]]>';
+css (String str) => '<style type"text/css">\n/*<![CDATA[*/\n$str\n/*]]>*/</style>';
+javascript (String str) => '<script type="text/javascript">\n//<![CDATA[\n$str\n//]]></script>';
 
-String attrs (Map attrMap) {
+attrs(Map attrMap) {
   StringBuffer buf = new StringBuffer();
   for (var key in attrMap.keys) {
     if (attrMap[key] is bool) {
@@ -21,8 +19,8 @@ String attrs (Map attrMap) {
   return buf.toString();
 }
 
-String escape (String str) {
- return str.toString()
+escape(String str) {
+ return str
   .replaceAll('&', '&amp;')
   .replaceAll('>', '&gt;')
   .replaceAll('<', '&lt;')
