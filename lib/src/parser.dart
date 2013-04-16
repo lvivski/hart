@@ -6,7 +6,7 @@ class Parser {
   List tokens;
   Map<String,String> current;
 
-  Parser(string) {
+  Parser(String string) {
     this.tokens = Lexer.tokenize(string);
   }
 
@@ -169,7 +169,7 @@ class Parser {
     if (peek['type'] != 'indent') {
       throw new Exception("filter '${filter}' expects a text block");
     }
-    return "\${Filters.${filter}('${_textBlock()}')}";
+    return "\${$filter('${_textBlock()}')}";
   }
 
   String _iterate() {

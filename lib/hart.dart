@@ -8,7 +8,7 @@ class Hart {
     return new Parser(data).parsed;
   }
 
-  static String compile(Map templates) {
+  static String compile(Map<String,String> templates) {
     templates.keys.forEach((key) => templates[key] = parse(templates[key]));
 
     return Compiler.compile(templates);
