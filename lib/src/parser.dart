@@ -184,7 +184,7 @@ class Parser {
     switch (peek['type']) {
       case 'id':
       case 'class':
-        tokens.insertRange(0, 1, { 'type': 'tag', 'val': 'div' });
+        tokens.insert(0, { 'type': 'tag', 'val': 'div' });
         return _tag();
       case 'tag':
         return _tag();

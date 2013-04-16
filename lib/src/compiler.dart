@@ -9,7 +9,7 @@ class ${className}View extends View {
 
   ${className}View(this.locals);
 
-  noSuchMethod(InvocationMirror mirror) {
+  noSuchMethod(Invocation mirror) {
     if (locals == null) {
       locals = {};
     }
