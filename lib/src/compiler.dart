@@ -14,7 +14,7 @@ class ${className}View extends View {
       locals = {};
     }
     if (mirror.isGetter) {
-      return locals[mirror.memberName];
+      return locals[MirrorSystem.getName(mirror.memberName)];
     }
   }
 
@@ -59,6 +59,7 @@ class View {
   static String compile(Map<String,String> templates) {
     StringBuffer buff = new StringBuffer('''
 library view;
+import 'dart:mirrors';
 import 'package:hart/utils.dart';
 ''');
     templates.keys.forEach((key) {
